@@ -1,0 +1,7 @@
+env
+*.pyc
+build
+settings.json
+shell.nix
+hslib.egg*
+sandbox*
