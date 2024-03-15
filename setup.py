@@ -12,7 +12,7 @@ except:
 
 
 setuptools.setup(
-    name="hslib",
+    name="IDPlib",
     version=version,
     author="Jack Jorgensen",
     author_email="",

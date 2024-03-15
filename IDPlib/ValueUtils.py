@@ -163,14 +163,13 @@ class Compare:
 
 
 class Identify:
-
     @staticmethod
     def credit_card_number(value):
-        '''
+        """
         Attempts to identify if the value presented is a credit card
         Note, this isnt 100% but it is reasonably successful. If you dont like
         the outcome you are welcome to submit a patch
-        '''
+        """
         # Normalise the value
         try:
             cc_num = "".join(filter(str.isdigit, value))
@@ -220,9 +219,9 @@ class Identify:
 
     @staticmethod
     def abn(value):
-        '''
+        """
         Checks if a given string meets the requirements of a valid abn number
-        '''
+        """
         abn = str(value).replace(" ", "").replace("-", "")
         if not abn.isdigit() or len(abn) != 11:
             return False
@@ -236,34 +235,34 @@ class Identify:
         check_sum = sum(map(operator.mul, temp_abn, weighting)) % modulus
         if check_sum != 0:
             return False
-        return True 
+        return True
 
     @staticmethod
     def tfn(value):
-        '''
+        """
         Checks if a given string meets the requirements of a valid tfn number
-        '''
+        """
         tfn = str(value).replace(" ", "")
         if not tfn.isdigit() or len(tfn) != 9:
             return False
         weighting = [1, 4, 3, 7, 5, 8, 6, 9, 10]
         check_sum = sum(int(tfn[i]) * weighting[i] for i in range(9))
         return check_sum % 11 == 0
-    
+
     @staticmethod
     def tfn_in_string(value, max_gap=6):
-        '''
+        """
         Checks if a given string contains a substring which meets the requirements
         of a valid tfn number
         max gap is the maximum amount of non digit characters between digit values
-        '''
+        """
         pattern = r"\d{3}\s?\d{3}\s?\d{3}"
         match = re.search(pattern, value)
         if match:
             tfn = match.group(0)
             if tfn:
                 return True
-            
+
         def full_shift_check(string):
             """
             The function checks for valid tfn's in a given string and returns a list of valid tfn's.
@@ -288,7 +287,7 @@ class Identify:
             for item in groups:
                 if Identify.tfn(item):
                     found_tfns.append(item)
-            return found_tfns  
+            return found_tfns
 
         pattern = rf"(?:(?:\ |\-){{0,{max_gap}}}(?:\d)){{8,}}"
         matches = re.findall(pattern, value)  # Search for potential TFNs

@@ -2,7 +2,7 @@ import os.path as path
 import sys
 import unittest
 from unittest.mock import ANY
-from hslib import ValueUtils
+from IDPlib import ValueUtils
 
 class test_compare_values(unittest.TestCase):
     def test_compare_digits(self):

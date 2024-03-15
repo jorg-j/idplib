@@ -3,5 +3,7 @@ env
 build
 settings.json
 shell.nix
-hslib.egg*
+*.egg*
 sandbox*
+
+__pycache__*
