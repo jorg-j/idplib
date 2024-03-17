@@ -7,3 +7,4 @@ shell.nix
 sandbox*
 
 __pycache__*
+hslib*
