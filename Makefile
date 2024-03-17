@@ -27,7 +27,7 @@ build:
 
 install: build
 	-@$(VENV_DIR)/bin/pip3 uninstall IDPlib -y
-	@$(VENV_DIR)/bin/pip3 install "dist/IDPlib-$(VERSION)-py3-none-any.whl"
+	@$(VENV_DIR)/bin/pip3 install "dist/idplib-$(VERSION)-py3-none-any.whl"
 
 test:
 	poetry env use 3.7.16 && poetry run pytest tests

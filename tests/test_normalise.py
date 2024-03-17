@@ -2,7 +2,7 @@ import os.path as path
 import sys
 import unittest
 from unittest.mock import ANY
-from IDPlib import ValueUtils
+from idplib import ValueUtils
 import datetime
 
 class test_normalised_values(unittest.TestCase):

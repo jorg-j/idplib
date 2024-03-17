@@ -14,7 +14,7 @@ class CoreKeys:
 
 
 class Locate:
-    def __init__(self, document_fields: Dict[str, Any]) -> None:
+    def __init__(self, document_fields: List[Dict]) -> None:
         self.document_fields = document_fields
 
     def fields_by_name(self, field_name: str) -> List[Dict]:
@@ -23,11 +23,11 @@ class Locate:
         Returns a list of HS fields
         """
         return list(
-            filter(lambda x: x["field_name"] == field_name, self.document_fields) # type: ignore
+            filter(lambda x: x["field_name"] == field_name, self.document_fields)  # type: ignore
         )
 
     def fields_by_occurrence(
-        self, occurence: int, fields: Dict[str, Any] = None
+        self, occurence: int, fields: List[Dict] | None = None
     ) -> List[Dict]:
         """
         Locate all fields based on occurrence index value
@@ -37,11 +37,11 @@ class Locate:
             fields = self.document_fields
 
         return list(
-            filter(lambda x: x["occurrence_index"] == occurence, self.document_fields) # type: ignore
+            filter(lambda x: x["occurrence_index"] == occurence, self.document_fields)
         )
 
     def value_at_position(
-        self, field_name, occurrence: int, normalised: bool = True
+        self, field_name: str, occurrence: int, normalised: bool = True
     ) -> str:
         # Gather all fields matching field_name
         filtered_fields = self.fields_by_name(field_name=field_name)
@@ -81,7 +81,7 @@ class Locate:
 
 
 class Document:
-    def __init__(self, document):
+    def __init__(self, document: Dict[str, Any])-> None:
         """ """
         self.document = document
         self._fields = document["document_fields"]
@@ -91,22 +91,22 @@ class Document:
         self.locate = Locate(self._fields)
 
     @property
-    def fields(self):
+    def fields(self) -> List[Dict]:
         return self._fields
 
     @fields.setter
-    def fields(self, value):
+    def fields(self, value: Dict[str, Any])->None:
         self._fields.append(value)
 
     @fields.deleter
-    def fields(self):
+    def fields(self)-> None:
         self._fields = self.document["document_fields"]
         self.locate = Locate(self._fields)
 
 
 class Documents:
     @staticmethod
-    def create_filename_array(submission_files):
+    def create_filename_array(submission_files: List[Dict])->Dict[str, str]:
         """
         Generate a filename arrary from incoming documents.
 
@@ -123,7 +123,7 @@ class Documents:
         return id_fname
 
     @staticmethod
-    def map_filenames(hs_documents, submission_files):
+    def map_filenames(hs_documents: List[Dict], submission_files: List[Dict])-> List[Dict]:
         """
         Map the filenames from the submission file data to the hs documents
         """
