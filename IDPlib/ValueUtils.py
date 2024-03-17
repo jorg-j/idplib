@@ -141,13 +141,16 @@ class Compare:
     @functools.lru_cache(maxsize=128)
     @replace_newline
     def string_with_percent(
-        value1: str, value2: str, threshold: int = 88, token_ratio: int = 89
+        value1: str, value2: str, threshold: int = 88,ignore_order:bool=False,  token_ratio: int = 89
     ):
         value = fuzz.WRatio(value1, value2)
         if value < threshold:
-            value = fuzz.token_sort_ratio(value1, value2)
-            if value > token_ratio:
-                return True, value
+            if ignore_order:
+                value = fuzz.token_sort_ratio(value1, value2)
+                if value > token_ratio:
+                    return True, value
+                else:
+                    return False, value
             else:
                 return False, value
         return True, value
@@ -156,9 +159,9 @@ class Compare:
     @functools.lru_cache(maxsize=128)
     @replace_newline
     def string(
-        value1: str, value2: str, threshold: int = 88, token_ratio: int = 89
+        value1: str, value2: str, threshold: int = 88, ignore_order:bool=False, token_ratio: int = 89
     ) -> bool:
-        result, _ = Compare.string_with_percent(value1, value2, threshold, token_ratio)
+        result, _ = Compare.string_with_percent(value1, value2, threshold,ignore_order, token_ratio)
         return result
 
 
