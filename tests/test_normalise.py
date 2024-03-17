@@ -30,6 +30,8 @@ class test_normalised_values(unittest.TestCase):
         result = ValueUtils.Normalise.safe_round(1.515)
         self.assertEqual(result, 1.52)
 
+        result = ValueUtils.Normalise.safe_round(1.515555, decimal_places=3)
+        self.assertEqual(result, 1.516)
 
     def test_date_convert_fromstring(self):
         result = ValueUtils.Normalise.Date.from_string('1/5/2024')

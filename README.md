@@ -11,7 +11,7 @@ pip install IDPlib
 
 ## Usage
 
-Useage will be broken down into a few concepts. General and tool specific.
+Usege will be broken down into a few concepts. General and tool specific.
 
 ### General
 
@@ -37,7 +37,7 @@ result = ValueUtils.Normalise.safe_round(1.515)
 >>> 1.52
 
 result = ValueUtils.Normalise.safe_round(1.5155, decimal_places=3)
->>> 1.5
+>>> 1.516
 
 # Dates
 
