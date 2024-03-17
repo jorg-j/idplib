@@ -4,7 +4,7 @@ import re
 import operator
 from decimal import ROUND_HALF_UP, Decimal
 
-from fuzzywuzzy import fuzz
+from fuzzywuzzy import fuzz # type: ignore
 
 
 def replace_newline(func):

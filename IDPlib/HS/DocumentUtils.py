@@ -4,8 +4,9 @@ from random import randint
 from dataclasses import dataclass, field
 import hashlib
 import copy
-from Exceptions import Messages
-import ValueUtils
+from Exceptions import Messages  # type: ignore
+import ValueUtils  # type: ignore
+from typing import Dict, Any, List, Tuple
 
 
 class CoreKeys:
@@ -13,19 +14,21 @@ class CoreKeys:
 
 
 class Locate:
-    def __init__(self, document_fields):
+    def __init__(self, document_fields: Dict[str, Any]) -> None:
         self.document_fields = document_fields
 
-    def fields_by_name(self, field_name):
+    def fields_by_name(self, field_name: str) -> List[Dict]:
         """
         Locate all fields in a HS document based on the field_name
         Returns a list of HS fields
         """
         return list(
-            filter(lambda x: x["field_name"] == field_name, self.document_fields)
+            filter(lambda x: x["field_name"] == field_name, self.document_fields) # type: ignore
         )
 
-    def fields_by_occurrence(self, occurence, fields=None):
+    def fields_by_occurrence(
+        self, occurence: int, fields: Dict[str, Any] = None
+    ) -> List[Dict]:
         """
         Locate all fields based on occurrence index value
         Returns a list of HS fields
@@ -34,10 +37,12 @@ class Locate:
             fields = self.document_fields
 
         return list(
-            filter(lambda x: x["occurrence_index"] == occurence, self.document_fields)
+            filter(lambda x: x["occurrence_index"] == occurence, self.document_fields) # type: ignore
         )
 
-    def value_at_position(self, field_name, occurrence, normalised=True):
+    def value_at_position(
+        self, field_name, occurrence: int, normalised: bool = True
+    ) -> str:
         # Gather all fields matching field_name
         filtered_fields = self.fields_by_name(field_name=field_name)
         filtered_occurences = self.fields_by_occurrence(
@@ -52,7 +57,9 @@ class Locate:
                 return field.get("transcription", "")
         return ""
 
-    def match_value_any_position(self, field_name, value, threshold=89):
+    def match_value_any_position(
+        self, field_name: str, value: str, threshold: int = 89
+    ) -> Tuple[bool, str | None, int | None]:
         """
         takes the field_name and the value then fuzzy matches the value
         against the values in the HS fields
@@ -70,7 +77,7 @@ class Locate:
             result = ValueUtils.Compare.string(value, normalised_value, threshold)
             if result:
                 return True, normalised_value, field.get("occurence_index")
-        return False, "", None
+        return False, None, None
 
 
 class Document:

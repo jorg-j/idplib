@@ -5,7 +5,7 @@ import json
 class SubmissionFiles:
     def __init__(self, submission):
         """
-        Take the HS submission data and extract the submission
+        Take the HS submission and extract the submission
         data
         """
         submission_id_ref = submission["id"]
