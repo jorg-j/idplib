@@ -46,7 +46,11 @@ result = ValueUtils.Normalise.safe_round(1.5155, decimal_places=3)
 # To Convert a string into a date. Handles most non American formats
 
 result = ValueUtils.Normalise.Date.from_string('1/5/2024')
->>> datetime.datetime(2024, 5,1, 0, 0)
+>>> datetime.datetime(2024, 5, 1, 0, 0)
+
+# With eagle_mode set to True it will manage US style dates
+result = ValueUtils.Normalise.Date.from_string('5/1/2024')
+>>> datetime.datetime(2024, 5, 1, 0, 0)
 
 # Get the tax year from a date given the tax year starts July 1
 

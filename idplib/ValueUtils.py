@@ -52,13 +52,16 @@ class Normalise:
     class Date:
         @staticmethod
         @replace_newline
-        def from_string(value: str):
+        def from_string(value: str, eagle_mode:bool=False):
             """
             Converts a string date into a datetime object by trying different date formats and
             returning a default date if none of the formats work.
 
             :param value: a string representing a date in various formats, such as '2022-01-01', 'Jan. 1, 2022',
             '1/1/22', etc
+            :param eagle_mode: a boolean defaulted to False which if set to True will utalise US formats for dates
+
+
             :return: a datetime object representing the input date string in one of the specified formats, or a
             datetime object representing the date '31/12/2999' if none of the formats match the input string.
             """
@@ -76,21 +79,40 @@ class Normalise:
                 # but not in the special case of 'august'
                 value = re.sub(r"(?<!augu)st", "", value)
 
-                formats = [
-                    "%Y/%m/%d",
-                    "%Y/%b/%-d",
-                    "%Y/%b/%d",
-                    "%d/%m/%Y",
-                    "%-d/%m/%Y",
-                    "%d/%b/%Y",
-                    "%d%B%Y",
-                    "%d/%B/%Y",
-                    "%d/%m/%y",
-                    "%-d/%m/%y",
-                    "%d/%b/%y",
-                    "%d%B%y",
-                    "%d/%B/%y",
-                ]
+                if eagle_mode:
+                    formats = [
+                        "%Y/%d/%m",
+                        "%Y/%-d/%b",
+                        "%Y/%d/%b",
+                        "%m/%d/%Y",
+                        "%m/%-d/%Y",
+                        "%b/%d/%Y",
+                        "%B%d%Y",
+                        "%B/%d/%Y",
+                        "%m/%d/%y",
+                        "%m/%-d/%y",
+                        "%b/%d/%y",
+                        "%B%d%y",
+                        "%B/%d/%y",
+                    ]
+
+                else:
+
+                    formats = [
+                        "%Y/%m/%d",
+                        "%Y/%b/%-d",
+                        "%Y/%b/%d",
+                        "%d/%m/%Y",
+                        "%-d/%m/%Y",
+                        "%d/%b/%Y",
+                        "%d%B%Y",
+                        "%d/%B/%Y",
+                        "%d/%m/%y",
+                        "%-d/%m/%y",
+                        "%d/%b/%y",
+                        "%d%B%y",
+                        "%d/%B/%y",
+                    ]
 
                 for date_format in formats:
                     try:
