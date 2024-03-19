@@ -1,10 +1,25 @@
-env
+# Byte-compiled / optimized / DLL files
+__pycache__/
 *.pyc
-build
-settings.json
-shell.nix
-*.egg*
-sandbox*
+*.pyo
+*.pyd
 
-__pycache__*
-hslib*
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE files
+.idea/
+.vscode/
+
+# OS or editor temporary files
+*.swp
+*~
+.DS_Store
+
+# Nix Files
+shell.nix
+
+# Dev
+sandbox*
