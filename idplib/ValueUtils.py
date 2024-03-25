@@ -3,7 +3,8 @@ import functools
 import re
 import operator
 from decimal import ROUND_HALF_UP, Decimal
-
+from defaults import DateFormat, Cleaner
+from algorithms import CreditCard, AusGov
 from fuzzywuzzy import fuzz # type: ignore
 
 
@@ -65,58 +66,36 @@ class Normalise:
             :return: a datetime object representing the input date string in one of the specified formats, or a
             datetime object representing the date '31/12/2999' if none of the formats match the input string.
             """
+            symbols = ["-", ".", "_", " "]
+            appendix = ["nd", "th", ","]
+
             try:
-                symbols = ["-", ".", "_", " "]
-                value = value.lower()
+                value_lower = value.lower()
 
-                for s in symbols:
-                    value = value.replace(s, "/")
+                value_no_symbols = Cleaner.replace_range(
+                    values=symbols, 
+                    substitution="/", 
+                    string=value_lower
+                    )
 
-                for appendix in ["nd", "th", ","]:
-                    value = value.replace(appendix, "")
+                value_no_appendix = Cleaner.replace_range(
+                    values=appendix, 
+                    substitution="", 
+                    string=value_no_symbols
+                    )
 
                 # replace all occurences of 'st' in date
                 # but not in the special case of 'august'
-                value = re.sub(r"(?<!augu)st", "", value)
+                value_no_st = re.sub(r"(?<!augu)st", "", value_no_appendix)
 
                 if eagle_mode:
-                    formats = [
-                        "%Y/%d/%m",
-                        "%Y/%-d/%b",
-                        "%Y/%d/%b",
-                        "%m/%d/%Y",
-                        "%m/%-d/%Y",
-                        "%b/%d/%Y",
-                        "%B%d%Y",
-                        "%B/%d/%Y",
-                        "%m/%d/%y",
-                        "%m/%-d/%y",
-                        "%b/%d/%y",
-                        "%B%d%y",
-                        "%B/%d/%y",
-                    ]
-
+                    formats = DateFormat.US
                 else:
-
-                    formats = [
-                        "%Y/%m/%d",
-                        "%Y/%b/%-d",
-                        "%Y/%b/%d",
-                        "%d/%m/%Y",
-                        "%-d/%m/%Y",
-                        "%d/%b/%Y",
-                        "%d%B%Y",
-                        "%d/%B/%Y",
-                        "%d/%m/%y",
-                        "%-d/%m/%y",
-                        "%d/%b/%y",
-                        "%d%B%y",
-                        "%d/%B/%y",
-                    ]
+                    formats = DateFormat.Standard
 
                 for date_format in formats:
                     try:
-                        dt = datetime.datetime.strptime(value, date_format)
+                        dt = datetime.datetime.strptime(value_no_st, date_format)
                         return dt
                     except ValueError:
                         pass
@@ -198,69 +177,36 @@ class Identify:
         # Normalise the value
         try:
             cc_num = "".join(filter(str.isdigit, value))
+            if CreditCard.luhn(cc_num):
+                return True
 
-            if len(cc_num) == 16 and cc_num.isdigit():
-                digits = list(map(int, cc_num))
-                doubled_digits = [
-                    2 * digit if index % 2 else digit
-                    for index, digit in enumerate(digits[::-1])
-                ]
-                summed_digits = sum(
-                    digit - 9 if digit > 9 else digit for digit in doubled_digits
-                )
-
-                if summed_digits % 10 == 0:
-                    return True
         except:
             pass
         finally:
-            # Basic Check
+            # Check if card is likely one of the below
+            return CreditCard.is_visa(value) or \
+                CreditCard.is_mastercard(value) or \
+                CreditCard.is_discover(value) or \
+                CreditCard.is_amex(value)
 
-            ## is Visa
-            pattern = r"^4[0-9]"
-            match = re.search(pattern, value)
-            if match:
-                return True
 
-            ## is MasterCard
-            pattern = r"^5[1-5][0-9]"
-            match = re.search(pattern, value)
-            if match:
-                return True
-
-            ## Is Discover
-            if (
-                value.startswith("6011")
-                or value.startswith("644")
-                or value.startswith("65")
-            ):
-                return True
-
-            ## is Amex
-            if value.startswith("34") or value.startswith("37"):
-                return True
-
-        return False
 
     @staticmethod
     def abn(value):
         """
         Checks if a given string meets the requirements of a valid abn number
         """
-        abn = str(value).replace(" ", "").replace("-", "")
+        abn = Cleaner.replace_range(
+            values=[" ", "-"], 
+            substitution="", 
+            string=str(value)
+            )
+        
         if not abn.isdigit() or len(abn) != 11:
             return False
+        
+        return AusGov.abn(abn=abn)
 
-        weighting = [10, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
-        modulus = 89
-
-        temp_abn = [int(c) for c in abn if c.isdigit()]
-        temp_abn[0] -= 1
-
-        check_sum = sum(map(operator.mul, temp_abn, weighting)) % modulus
-        if check_sum != 0:
-            return False
-        return True
 
     @staticmethod
     def tfn(value):
@@ -270,9 +216,7 @@ class Identify:
         tfn = str(value).replace(" ", "")
         if not tfn.isdigit() or len(tfn) != 9:
             return False
-        weighting = [1, 4, 3, 7, 5, 8, 6, 9, 10]
-        check_sum = sum(int(tfn[i]) * weighting[i] for i in range(9))
-        return check_sum % 11 == 0
+        return AusGov.tfn(tfn=tfn)
 
     @staticmethod
     def tfn_in_string(value, max_gap=6):

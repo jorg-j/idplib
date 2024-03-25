@@ -109,7 +109,7 @@ class GA:
             for i in range(n_pop):
                 if scores[i] < best_eval:
                     best, best_eval = pop[i], scores[i]
-                    print(">%d, new best f(%s) = %f" % (gen, decoded[i], scores[i]))
+                    print("%d, found new best f(%s) = %f" % (gen, decoded[i], scores[i]))
 
             selected = [self.selection(pop, scores) for _ in range(n_pop)]
 
