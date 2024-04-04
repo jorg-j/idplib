@@ -89,6 +89,7 @@ result = ValueUtils.Compare.string('the quick brown fox', 'brown quick the fox',
 
 result, percent = ValueUtils.Compare.string_with_percent('the quick brown fox', 'the quick brown f0x')
 >>> True, 95
+
 ```
 
 #### Identify
@@ -121,6 +122,46 @@ result = ValueUtils.tfn_in_string('My Full Page here')
 
 ## There is also an option for max_gap which allows you to control the maximum distance between digits to prevent false positives
 ```
+
+### Determining a threshold
+
+One of the biggest challenges I have found with Fuzzy Logic is knowing what threshold to use for a given set of data.
+
+In order to help make this easier there is a Genetic Algorithm built into the library to help determine the required threshold based on information in your usecase.
+
+Usage:
+```
+from idplib.Utilities.FuzzyFinder import GA
+x = GA(objectives)
+x.run()
+```
+
+To prepare the objectives data create a list of lists, with each of the sublists being
+```
+[value1, value2, bool_should_match]
+```
+
+ie
+
+```
+[
+    ["Jim", "J1m", True],
+    ["Egg", "3gg", True],
+    ["Bacon", "Smith", False]
+]
+```
+
+If you want to generate an example of this 
+```
+from idplib.Utilities.FuzzyFinder import Example
+
+Example.fuzzy()
+
+```
+This will generate a file called `example.json` which you can use as a starting point.
+
+
+
 
 ### HyperScience Specific
 

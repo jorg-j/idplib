@@ -16,7 +16,7 @@ setuptools.setup(
     version=version,
     author="Jack Jorgensen",
     author_email="",
-    description="Package to support Hyperscience validation process",
+    description="Package to support IDP validation processes",
     long_description=full_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
