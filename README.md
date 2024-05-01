@@ -6,10 +6,9 @@ The purpose of this library is to provide useful tools to support IDP based proc
 ## Install
 
 ```
-pip install dist/idplib-0.0.1-py3-none-any.whl
+pip install idplib
 ```
 
-Lib is not currently on pypi until it is more stable
 
 ## Usage
 
