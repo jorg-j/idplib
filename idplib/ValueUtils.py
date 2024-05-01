@@ -3,8 +3,8 @@ import functools
 import re
 import operator
 from decimal import ROUND_HALF_UP, Decimal
-from defaults import DateFormat, Cleaner
-from algorithms import CreditCard, AusGov
+from .defaults import DateFormat, Cleaner
+from .algorithms import CreditCard, AusGov
 from fuzzywuzzy import fuzz # type: ignore
 
 
