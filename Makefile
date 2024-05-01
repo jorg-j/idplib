@@ -3,7 +3,7 @@
 .PHONY: test
 VENV_DIR := env
 PYTEST := $(VENV_DIR)/bin/pytest
-VERSION := 0.0.1
+VERSION := 0.0.3
 
 clean:
 	$(info ##### echo Cleaning Directories #####)
@@ -21,13 +21,12 @@ check_dependencies:
 	poetry install
 
 
-build:
+build: clean
 	poetry build
-
 
 install: build
 	-@$(VENV_DIR)/bin/pip3 uninstall IDPlib -y
 	@$(VENV_DIR)/bin/pip3 install "dist/idplib-$(VERSION)-py3-none-any.whl"
 
-test:
-	poetry env use 3.7.16 && poetry run pytest tests
+test: check_dependencies
+	poetry env use 3.7.16 && poetry install && poetry run pytest tests
