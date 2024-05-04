@@ -180,14 +180,14 @@ class Identify:
             if CreditCard.luhn(cc_num):
                 return True
 
-        except:
-            pass
-        finally:
-            # Check if card is likely one of the below
-            return CreditCard.is_visa(value) or \
-                CreditCard.is_mastercard(value) or \
-                CreditCard.is_discover(value) or \
-                CreditCard.is_amex(value)
+        except Exception as e:
+            print(e)
+
+        # Check if card is likely one of the below
+        return CreditCard.is_visa(value) or \
+            CreditCard.is_mastercard(value) or \
+            CreditCard.is_discover(value) or \
+            CreditCard.is_amex(value)
 
 
 

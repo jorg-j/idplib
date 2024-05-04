@@ -3,7 +3,7 @@
 .PHONY: test
 VENV_DIR := env
 PYTEST := $(VENV_DIR)/bin/pytest
-VERSION := 0.0.3
+VERSION := 0.0.4
 
 clean:
 	$(info ##### echo Cleaning Directories #####)
