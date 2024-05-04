@@ -7,7 +7,7 @@ from idplib import ValueUtils
 class test_identify_values(unittest.TestCase):
     def test_identify_creditcard(self):
 
-        result = ValueUtils.Identify.credit_card_number('7949519628')
+        result = ValueUtils.Identify.credit_card_number('79927398713')
 
         self.assertEqual(result, True)
 
