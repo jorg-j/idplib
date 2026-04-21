@@ -5,6 +5,7 @@ import re
 class CreditCard:
     @staticmethod
     def luhn(card_number):
+        assert card_number is not None
         n_digits = len(card_number)
         n_sum = 0
         is_second = False
@@ -29,7 +30,9 @@ class CreditCard:
             return False
 
     @staticmethod
-    def is_visa(card_number):
+    def is_visa(card_number:str) -> bool:
+        assert card_number is not None, "Card number can not be none"
+        assert isinstance(card_number, str), f"Card number must be of type string: {type(card_number)}"
         ## is Visa
         pattern = r"^4[0-9]"
         match = re.search(pattern, card_number)
@@ -38,7 +41,9 @@ class CreditCard:
         return False
 
     @staticmethod
-    def is_mastercard(card_number):
+    def is_mastercard(card_number:str) -> bool:
+        assert card_number is not None, "Card number can not be none"
+        assert isinstance(card_number, str), f"Card number must be of type string: {type(card_number)}"
         ## is Visa
         pattern = r"^5[1-5][0-9]"
         match = re.search(pattern, card_number)
@@ -47,7 +52,9 @@ class CreditCard:
         return False
 
     @staticmethod
-    def is_discover(card_number):
+    def is_discover(card_number:str) -> bool:
+        assert card_number is not None, "Card number can not be none"
+        assert isinstance(card_number, str), f"Card number must be of type string: {type(card_number)}"
         if (
             card_number.startswith("6011")
             or card_number.startswith("644")
@@ -57,31 +64,21 @@ class CreditCard:
         return False
 
     @staticmethod
-    def is_amex(card_number):
+    def is_amex(card_number:str) -> bool:
+        assert card_number is not None, "Card number can not be none"
+        assert isinstance(card_number, str), f"Card number must be of type string: {type(card_number)}"
         if card_number.startswith("34") or card_number.startswith("37"):
             return True
         return False
 
-        # if len(cc_num) == 16 and cc_num.isdigit():
-        #     digits = list(map(int, cc_num))
-        #     doubled_digits = [
-        #         2 * digit if index % 2 else digit
-        #         for index, digit in enumerate(digits[::-1])
-        #     ]
-        #     summed_digits = sum(
-        #         digit - 9 if digit > 9 else digit for digit in doubled_digits
-        #     )
-
-        #     if summed_digits % 10 == 0:
-        #         return True
-
-
 class AusGov:
     @staticmethod
-    def abn(abn):
+    def abn(abn:str) -> bool:
         """
         Checks if a given string meets the requirements of a valid abn number
         """
+        assert abn is not None, "Abn value can not be nothing"
+        assert isinstance(abn, str), f"ABN value must be of type string: {type(abn)}"
 
         weighting = [10, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
         modulus = 89
@@ -95,7 +92,10 @@ class AusGov:
         return True
 
     @staticmethod
-    def tfn(tfn):
+    def tfn(tfn:str) -> bool:
+        assert tfn is not None, "tfn value can not be nothing"
+        assert isinstance(tfn, str), f"tfn value must be of type string: {type(tfn)}"
+
         weighting = [1, 4, 3, 7, 5, 8, 6, 9, 10]
         check_sum = sum(int(tfn[i]) * weighting[i] for i in range(9))
         return check_sum % 11 == 0

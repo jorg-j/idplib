@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "idplib"
-version = "0.0.3"
+version = "0.0.4"
 description = "IDP Project utility tools"
 authors = ["Jack Jorgensen <jorgensen.jack@gmail.com>"]
 license = "MIT"

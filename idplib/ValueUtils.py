@@ -33,7 +33,13 @@ class Normalise:
         """
         Removes spaces and dashes from a given string.
         """
-        return re.sub(pattern, "", value)
+        assert value is not None and value != "", "Unable to normalise a None value in Normalise.digit"
+        assert pattern is not None and pattern != "" and isinstance(pattern, str), "Normalise.digit requires a pattern and the pattern needs to be a string, there is a default being overwritten, use the default value."
+        assert isinstance(value, str), f"Normalise.digit value should be of type string, received: {type(value)}"
+
+        result = re.sub(pattern, "", value)
+        assert result is not None
+        return result
 
     @staticmethod
     def safe_round(value: float, decimal_places: int = 2) -> float:
@@ -47,7 +53,7 @@ class Normalise:
 
         # Convert the rounded Decimal back to a float
         rounded_float = float(rounded_decimal)
-
+        assert isinstance(rounded_float, float)
         return rounded_float
 
     class Date:
@@ -66,6 +72,8 @@ class Normalise:
             :return: a datetime object representing the input date string in one of the specified formats, or a
             datetime object representing the date '31/12/2999' if none of the formats match the input string.
             """
+            assert value is not None, "String submitted needs value"
+            assert isinstance(value, str), f"Date.from_string value needs to be a string: {type(value)}"
             symbols = ["-", ".", "_", " "]
             appendix = ["nd", "th", ","]
 
@@ -174,20 +182,18 @@ class Identify:
         Note, this isnt 100% but it is reasonably successful. If you dont like
         the outcome you are welcome to submit a patch
         """
-        # Normalise the value
-        try:
-            cc_num = "".join(filter(str.isdigit, value))
-            if CreditCard.luhn(cc_num):
-                return True
 
-        except:
-            pass
-        finally:
-            # Check if card is likely one of the below
-            return CreditCard.is_visa(value) or \
-                CreditCard.is_mastercard(value) or \
-                CreditCard.is_discover(value) or \
-                CreditCard.is_amex(value)
+        
+        # Normalise the value
+        cc_num = "".join(filter(str.isdigit, value))
+        if CreditCard.luhn(cc_num):
+            return True
+
+        # Check if card is likely one of the below
+        return CreditCard.is_visa(value) or \
+            CreditCard.is_mastercard(value) or \
+            CreditCard.is_discover(value) or \
+            CreditCard.is_amex(value)
 
 
 
