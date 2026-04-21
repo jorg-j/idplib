@@ -37,7 +37,7 @@ install: build
 	@$(VENV_DIR)/bin/pip3 install "dist/idplib-$(VERSION)-py3-none-any.whl"
 
 test: build
-	source $(VENV_DIR)/bin/activate && pytest tests; deactivate
+	# source $(VENV_DIR)/bin/activate && pytest tests; deactivate
 	poetry env use 3.7.16 && poetry install && poetry run pytest tests
 
 # Test using docker to ensure isolated 3.7 environment is used
